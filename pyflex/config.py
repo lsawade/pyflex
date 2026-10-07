@@ -136,7 +136,7 @@ class Config(object):
             Only used if station and event information is available.
         :type min_surface_wave_velocity: float
 
-        :param max_surface_wave_velocity: The maxium surface wave velocity
+        :param max_surface_wave_velocity: The maximum surface wave velocity
             in km/s. The two values, min_surface_wave_velocity and
             max_surface_wave_velocity are used to calculate surface wave time
             region. All windows containing data earlier than the min velocity
@@ -259,6 +259,7 @@ class Config(object):
                 max_surface_wave_velocity).
             * ``"body_and_surface_waves"``: windows inside body and surface
                 wave regions.
+            * ``"body_and_mantle_waves"``: exclude surface waves
             * ``mantle_waves``: pyflex will only accept windows after the
                 surface wave region.
             * ``custom``: all windows will pass the check(nothing rejected)
@@ -340,7 +341,6 @@ class Config(object):
                         "6) custom; 7) phase_list;".format(selection_mode))
 
         self.selection_mode = selection_mode
-
 
 
 

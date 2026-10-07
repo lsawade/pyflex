@@ -79,9 +79,17 @@ def get_surface_wave_arrivals(dist_in_deg, min_vel, max_vel, ncircles=1):
     Calculate the arrival time of surface waves, based on the distance
     and velocity range (min_vel, max_vel).
     This function will calculate both minor-arc and major-arc surface
-    waves. It further calcualte the surface orbit multiple times
+    waves. It further calculates the surface orbit multiple times
     if you set the ncircles > 1.
 
+:type dist_in_deg: float
+:param dist_in_deg: great circle source-receiver distance in units of degrees
+:type min_vel: float
+:param min_vel: minimum expected surface wave velocity to get latest arrival, units of km/s
+:type max_vel: float
+:param max_vel: maximum expected surface wave velocity to get earliest arrival, units of km/s
+:type ncircles: int
+:param ncircles: number of global orbits to calculate, defaults to 1
     Returns the list of surface wave arrivals in time order.
     """
     if min_vel > max_vel:
