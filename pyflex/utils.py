@@ -15,6 +15,7 @@ import numpy as np
 from scipy.signal import argrelextrema
 from obspy.geodetics import degrees2kilometers
 
+from . import logger
 
 def find_local_extrema(data):
     """
@@ -94,6 +95,7 @@ def get_surface_wave_arrivals(dist_in_deg, min_vel, max_vel, ncircles=1):
     """
     if min_vel > max_vel:
         min_vel, max_vel = max_vel, min_vel
+        logger.warning(f"Min and Max velocity for surface wave window are swapped {max_vel}<->{min_vel}")
 
     earth_circle = degrees2kilometers(360.0)
     dt1 = earth_circle / max_vel
