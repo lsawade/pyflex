@@ -193,10 +193,16 @@ class WindowSelector(object):
 
     def write_text(self, filename):
         """
-        Write windows to a plain text file. For example, after
-        you selecting windows, you want to write them out and
-        save as text files, you can call:
-        ws.write_text("window.txt")
+        Write basic window information to a plain text file in the following format:
+         <observed_trace_id>
+         <synthetic_trace_id>
+         <number_of_windows>
+         <window_1_start> <window_1_end>
+         # ...
+         <window_n_start> <window_n_end>
+         # repeat
+        .. rubric::
+            WindowSelector.write_text(filename="windows.txt")
 
         :param filename: Name to write to.
         :type filename: str
@@ -324,10 +330,7 @@ class WindowSelector(object):
                     self.observed.stats.starttime
                 min_idx = 0
                 max_idx = self.observed.stats.npts
-
-
             else:
-
                 offset = self.event.origin_time - self.observed.stats.starttime
                 min_time = self.ttimes[0]["time"] - \
                     self.config.max_time_before_first_arrival + offset
@@ -364,7 +367,7 @@ class WindowSelector(object):
                                     (self.peaks < max_trough)]
 
 
-    def __print_remaining_windows(self):
+    def _print_remaining_windows(self):
         logger.debug("Remaining windows: %d" % (len(self.windows)))
         logger.debug("idx:    left(s)  center(s)   right(s)")
         for idx, win in enumerate(self.windows):
@@ -402,7 +405,6 @@ class WindowSelector(object):
             if self.config.selection_mode is not None:
                 # Base on specific selection mode
                 self.reject_on_selection_mode()
-                pass
             else:
                 # Based on basic traveltimes
                 self.reject_on_traveltimes()
@@ -439,7 +441,7 @@ class WindowSelector(object):
             self.merge_windows()
         else:
             raise NotImplementedError
-        self.__print_remaining_windows()
+        self._print_remaining_windows()
 
         if self.ttimes:
             self.attach_phase_arrivals_to_windows()
@@ -503,9 +505,7 @@ class WindowSelector(object):
 
     def calculate_signal_end_index(self):
         """
-        If self.config.noise_end_index is not given, calculate the noise
-        end index based the first arrival(event and station information
-        required).
+Calculate the index of the end of the signal of interest based on the minimum surface wave arrival
         """
 
         offset = self.event.origin_time - self.observed.stats.starttime
@@ -651,7 +651,6 @@ class WindowSelector(object):
 
         # Filter windows for Energy SNR
         if window_snr_type in ("energy", "amplitude_and_energy"):
-
             windows = list(filter(filter_window_noise_energy,
                                        windows))
             logger.info("SNR(Energy) rejection retained {}/{} "
@@ -1297,7 +1296,7 @@ class WindowSelector(object):
 
         ptp = sorted([np.ptp(self.observed.data), np.ptp(self.synthetic.data)])
         if ptp[1] / ptp[0] >= 5:
-            warnings.warn("The amplitude difference between data and"
+            warnings.warn("The amplitude difference between data and "
                           "synthetic is fairly large.")
 
         # Also check the components of the data to avoid silly mistakes of
