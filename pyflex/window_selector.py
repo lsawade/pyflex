@@ -268,7 +268,10 @@ class WindowSelector(object):
             else:
                 return
             sac = tr.stats.sac
-            values = (sac.evla, sac.evlo, sac.evdp, sac.stla, sac.stlo, sac.b)
+            # Cast float32 SAC headers to Python floats; NumPy 2 no longer
+            # upcasts float32 in arithmetic, which loses precision.
+            values = tuple(float(_i) for _i in (
+                sac.evla, sac.evlo, sac.evdp, sac.stla, sac.stlo, sac.b))
             # Invalid value in sac.
             if -12345.0 in values:
                 return
@@ -1292,7 +1295,7 @@ class WindowSelector(object):
             raise PyflexError("Observed and synthetic data must have the same "
                               "starttime.")
 
-        ptp = sorted([self.observed.data.ptp(), self.synthetic.data.ptp()])
+        ptp = sorted([np.ptp(self.observed.data), np.ptp(self.synthetic.data)])
         if ptp[1] / ptp[0] >= 5:
             warnings.warn("The amplitude difference between data and"
                           "synthetic is fairly large.")

@@ -26,7 +26,7 @@ def find_local_extrema(data):
     Returns a tuple of maxima and minima indices.
     """
     diff = np.diff(data)
-    flats = np.argwhere(diff == 0)
+    flats = np.flatnonzero(diff == 0)
 
     # Discard neighbouring flat points.
     new_flats = list(flats[0:1])
