@@ -193,16 +193,19 @@ class WindowSelector(object):
 
     def write_text(self, filename):
         """
-        Write basic window information to a plain text file in the following format:
-         <observed_trace_id>
-         <synthetic_trace_id>
-         <number_of_windows>
-         <window_1_start> <window_1_end>
-         # ...
-         <window_n_start> <window_n_end>
-         # repeat
-        .. rubric::
-            WindowSelector.write_text(filename="windows.txt")
+        Write basic window information to a plain text file in the following
+        format::
+
+            <observed_trace_id>
+            <synthetic_trace_id>
+            <number_of_windows>
+            <window_1_start> <window_1_end>
+            ...
+            <window_n_start> <window_n_end>
+
+        .. rubric:: Example
+
+        >>> ws.write_text(filename="windows.txt")  # doctest: +SKIP
 
         :param filename: Name to write to.
         :type filename: str
@@ -505,7 +508,8 @@ class WindowSelector(object):
 
     def calculate_signal_end_index(self):
         """
-Calculate the index of the end of the signal of interest based on the minimum surface wave arrival
+        Calculate the index of the end of the signal of interest based on the
+        minimum surface wave arrival.
         """
 
         offset = self.event.origin_time - self.observed.stats.starttime
@@ -876,11 +880,22 @@ Calculate the index of the end of the signal of interest based on the minimum su
 
     def reject_on_selection_mode(self):
         """
-        Reject based on selection mode.
-        This function will reject windows outside of the
-        wave category specified. For example, if config.selection_mode
-        == "body_waves", only body wave windows will be selected(after
-        first arrival and before surface wave arrival).
+        Reject windows outside a pre-defined phase window (e.g., body waves,
+        surface waves, mantle waves) using the User-defined `selection_mode`.
+
+        Available values for `selection_mode` are:
+
+        * ``"all_waves"``: all phases after first arrival
+        * ``"body_waves"``: all phases after first arrival and before first
+          surface wave arrival
+        * ``"surface_waves"``: all phases inside surface wave train
+        * ``"mantle_waves"``: all phases after final surface wave arrival
+        * ``"body_and_mantle_waves"``: exclude surface waves
+        * ``"body_and_surface_waves"``: all phases before final surface wave
+          arrival
+        * ``"phase_list:<phase1>,<phase2>,..."``: windows around the listed
+          phase arrivals
+        * ``"custom"``: no rejection
         """
         select_mode = self.config.selection_mode
         logger.debug("Selection mode <{}>".format((select_mode)))

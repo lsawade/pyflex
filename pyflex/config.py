@@ -342,8 +342,6 @@ class Config(object):
 
         self.selection_mode = selection_mode
 
-
-
     def _convert_to_array(self, npts):
         """
         Internally converts the acceptance and water levels to arrays. Not

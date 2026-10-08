@@ -83,19 +83,25 @@ def get_surface_wave_arrivals(dist_in_deg, min_vel, max_vel, ncircles=1):
     waves. It further calculates the surface orbit multiple times
     if you set the ncircles > 1.
 
-:type dist_in_deg: float
-:param dist_in_deg: great circle source-receiver distance in units of degrees
-:type min_vel: float
-:param min_vel: minimum expected surface wave velocity to get latest arrival, units of km/s
-:type max_vel: float
-:param max_vel: maximum expected surface wave velocity to get earliest arrival, units of km/s
-:type ncircles: int
-:param ncircles: number of global orbits to calculate, defaults to 1
+    :type dist_in_deg: float
+    :param dist_in_deg: great circle source-receiver distance in units of
+        degrees
+    :type min_vel: float
+    :param min_vel: minimum expected surface wave velocity to get latest
+        arrival, units of km/s
+    :type max_vel: float
+    :param max_vel: maximum expected surface wave velocity to get earliest
+        arrival, units of km/s
+    :type ncircles: int
+    :param ncircles: number of global orbits to calculate, defaults to 1
+
     Returns the list of surface wave arrivals in time order.
     """
     if min_vel > max_vel:
+        logger.warning(
+            "min_vel (%.2f) > max_vel (%.2f) for surface wave window; "
+            "swapping them." % (min_vel, max_vel))
         min_vel, max_vel = max_vel, min_vel
-        logger.warning(f"Min and Max velocity for surface wave window are swapped {max_vel}<->{min_vel}")
 
     earth_circle = degrees2kilometers(360.0)
     dt1 = earth_circle / max_vel
